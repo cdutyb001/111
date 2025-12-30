@@ -453,6 +453,9 @@ void GaussianModel::initialize(const std::shared_ptr<Dataset>& dataset,
             }
         }
     }
+
+
+    
     
     // 从稠密深度图中采样补充点（跳过稀疏点区域）
     auto depth_cpu = dense_depth.to(torch::kCPU);
@@ -464,7 +467,7 @@ void GaussianModel::initialize(const std::shared_ptr<Dataset>& dataset,
     std::vector<float> dense_depths;
     std::vector<float> dense_uncerts;
     
-    int sample_step = 1;  // 降采样因子    原本是4，为了增加高斯点数我改成了2，增加了4倍
+    int sample_step = 4;  // 降采样因子    原本是4，为了增加高斯点数我改成了2，增加了4倍
     for (int v = 0; v < H; v += sample_step) {
         for (int u = 0; u < W; u += sample_step) {
             // 跳过已有稀疏点的区域
@@ -1910,7 +1913,7 @@ void GaussianModel::probabilisticInitialize(
     std::vector<float> valid_uncertainties;
 
     // 降采样因子（避免点云过密）
-    int sample_step = 1;  // 降采样因子    原本是4，为了增加高斯点数我改成了2，增加了4倍
+    int sample_step = 4;  // 降采样因子    原本是4，为了增加高斯点数我改成了2，增加了4倍
     for(int v = 0;v<H;v+=sample_step){
         for(int u = 0; u < W;u += sample_step)
         {
