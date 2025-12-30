@@ -1,0 +1,83 @@
+width: 640
+height: 512
+fx: 431.71205
+fy: 431.70855
+cx: 320.3404
+cy: 259.1696
+
+# width: 960      # ✅ 改这里
+# height: 768     # ✅ 改这里
+
+# # 相应地缩放内参
+# fx: 647.568     # 431.71205 × 1.5 ✅
+# fy: 647.563     # 431.70855 × 1.5 ✅
+# cx: 480.511     # 320.3404 × 1.5 ✅
+# cy: 388.754     # 259.1696 × 1.5 ✅
+
+
+select_every_k_frame: 5
+
+sh_degree: 3
+white_background: false  # no adjustment needed
+random_background: false  # no adjustment needed
+convert_SHs_python: false  # no adjustment needed
+compute_cov3D_python: false  # no adjustment needed
+lambda_erank: 0  # no adjustment needed
+scaling_scale: 1  # 2 for less Gaussians
+
+position_lr: 0.00016
+feature_lr: 0.0025
+opacity_lr: 0.05
+scaling_lr: 0.005
+rotation_lr: 0.001
+lambda_dssim: 0.2
+
+apply_exposure: true
+exposure_lr: 0.005 #0.001
+# skybox_points_num: 100000  # 0 for indoor
+skybox_points_num: 0  # 0 for indoor
+skybox_radius: 1000
+
+# ================Mip_Splat_part===================== version 1
+apply_mip_filter: true
+mip_filter_var: 0.3
+apply_3d_filter: false
+filter_3d_Scale: 10.0
+filter_3d_update_freq: 100
+# ================Mip_Splat_part===================== version 1
+
+
+# ================Probabilistic Gaussian-LIC=====================
+enable_probabilistic: true
+uncertainty_threshold: 0.7     # 初始化置信度阈值 0.7
+uncertainty_beta: 5.0           # 不确定性调制强度 3  / 
+lambda_depth: 0 # 0.01  #0.0001 #0.05              # 深度损失权重   0.1
+lambda_normal: 0.005 #0.00005 # 0.02            # 法向损失权重   0.05
+init_scale_uncertaity_factor: 1.0       # 1
+init_opacity_uncertainty_factor: 1.0
+# ================Probabilistic Gaussian-LIC=====================
+
+# ================SGSNet 深度补全=====================
+use_sgsnet: true                          # 是否启用SGSNet
+sgsnet_model_path: "models/sgsnet.pt"     # 模型路径
+sgsnet_model_size: "standard"             # lite/standard/large
+sgsnet_max_depth: 100.0                   # 最大深度 (米)
+
+sgsnet:
+  enabled: true
+  model_path: "/root/catkin_gaussian/src/Gaussian_lic/src/SGSNet/models/sgsnet_trained_640x512_no_override.onnx" #sgsnet_trained_640x512.onnx"
+  use_cuda: true
+
+  # 混合深度损失参数
+lambda_lidar: 0.001 # 0 #1.0          # LiDAR 强约束权重 (Hard Constraint)
+lambda_sgs: 0.0001 #0 #0.1            # SGSNet 软约束权重 (Soft Constraint)
+use_scale_alignment: true  # 启用在线尺度对齐
+# ================SGSNet 深度补全=====================
+
+
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+快速开始
+1. 直接导出 ONNX 模型 (随机初始化)
+如果你只需要导出模型结构用于后续集成或测试:
+# 导出标准模型
+python3 export_sgsnet_onnx.py
+
+# 导出轻量级模型 (更快,精度稍低)
+python3 export_sgsnet_onnx.py --model-size lite
+
+# 导出大型模型 (更慢,精度更高)
+python3 export_sgsnet_onnx.py --model-size large
+
+# 指定输出路径和分辨率
+python3 export_sgsnet_onnx.py --output models/sgsnet.onnx --height 480 --width 640
+
+2. 训练模型
+
+使用合成数据测试训练流程:
+python3 train_sgsnet.py --epochs 10
+
+使用真实数据集:
+python3 train_sgsnet.py --data-dir /path/to/kitti --epochs 100 --batch-size 4
+
+数据集目录结构:
+data_dir/
+├── rgb/          # RGB图像 (.png 或 .jpg)
+├── sparse/       # 稀疏深度 (.png, 16bit, 单位mm)
+└── dense/        # 稠密深度GT (.png, 16bit) [可选]
+
+3. 导出训练好的模型
+python3 export_sgsnet_onnx.py --weights checkpoints/best_model.pth --output models/sgsnet_trained.onnx
+
+输入输出格式
+输入
+
+rgb: (B, 3, H, W) RGB图像, 值域 [0, 1]
+sparse_depth: (B, 1, H, W) 稀疏深度图, 0表示无效
+
+输出
+
+dense_depth: (B, 1, H, W) 稠密深度图, 单位米
+uncertainty: (B, 1, H, W) 不确定性图, [0, 1], 0=高置信度
